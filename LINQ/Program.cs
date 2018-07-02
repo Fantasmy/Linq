@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace LINQ
@@ -11,9 +13,11 @@ namespace LINQ
     {
         static void Main(string[] args)
         {
+            XNamespace empNM = "urn:lst-emp:emp";
+
             XDocument xmlDocument = new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),
-                new XComment("Creating an XML tree using LINQ to XML"),
+                new XComment("Creating an XML tree using LINQ to XML 2"),
                 new XElement("PurchaseOrder",
                     new XElement("Address", new XAttribute("Type", "Shipping"),
                         new XElement("Name", "Ellen Adams"),
@@ -30,7 +34,14 @@ namespace LINQ
                         new XElement("Zip", "95819"),
                         new XElement("Country", "USA"))));
 
+            StringWriter sw = new StringWriter();
+            XmlWriter xWrite = XmlWriter.Create(sw);
+            xmlDocument.Save(xWrite);
+            xWrite.Close();
+
+            // Save to Disk
             xmlDocument.Save("linq.xml");
+            Console.WriteLine("Saved");
         }
     }
 }
